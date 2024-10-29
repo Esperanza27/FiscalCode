@@ -7371,7 +7371,7 @@
     { "STATI UNITI", "Z404" },
     { "REGNO UNITO", "Z114" },
     { "SPAGNA", "Z404" },
-    { "PERÙ", "Z405" }
+    { "PERÙ", "Z611" }// CONTROLLA"Z405"
 };
 
 }

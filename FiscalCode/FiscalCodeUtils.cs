@@ -47,4 +47,30 @@ public class FiscalCodeUtils
         };
     }
 
+    private static int GetNumberAlphanumericCharacters(string temporaryCode)
+    {
+        int dispari=0;
+        int pari = 0;
+        for (int i = 0; i < temporaryCode.Length; i++)
+        {
+            if (i % 2 == 0)
+            {
+                dispari += AlphanumericCharacters.OddAlphanumericCharacters[temporaryCode[i]];
+            }
+            else
+            {
+                pari += AlphanumericCharacters.EvenAlphanumericCharacters[temporaryCode[i]];
+            }
+        }
+
+        return (dispari + pari)% 26;
+    }
+
+    public static char GetCodeAlphanumericCharacters(string temporaryCode) 
+    {
+        int codeNumber = GetNumberAlphanumericCharacters(temporaryCode);
+        char code = AlphanumericCharacters.RestAlphanumericCharacters[codeNumber];
+        return code;
+    }
+
 }//class

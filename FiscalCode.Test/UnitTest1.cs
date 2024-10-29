@@ -70,7 +70,7 @@ namespace FiscalCode.Test
         [InlineData("Milano", "F205")]
         [InlineData("Napoli", "F839")]
         [InlineData("Firenze", "D612")]
-        [InlineData("Perù", "Z405")]
+        [InlineData("Perù", "Z611")]
         [InlineData("Spagna", "Z404")]
         [InlineData("Stati Uniti", "Z404")]
         //[InlineData("Colombia", "Il luogo di nascita 'COLOMBIA' non è stato trovato nei codici Belfiore.")]
@@ -80,33 +80,32 @@ namespace FiscalCode.Test
             PersonUtils.GetFiscalPlaceOfBirth(place).Should().Be(expected);
         }
 
-
         [Theory]
         [InlineData("Marco", "rossi", "ROMA", "1985-11-05", "RSSMRC85S05H501")]
         [InlineData("Mario", "fo", "spagna", "2000-01-10", "FOXMRA00A10Z404")]
         [InlineData("gianfranco", "rosi", "Firenze", "1990-06-27", "RSOGFR90H27D612")]
-        public void GetCodFis_Man_test(string name, string surname, string placeOfBirth, string dateOfBirthString, string expected)
+        public void GetTemporaryCode_Man_test(string name, string surname, string placeOfBirth, string dateOfBirthString, string expected)
         {
             DateOnly dateOfBirth = DateOnly.Parse(dateOfBirthString);
             Person personMan = new Man(name, surname, placeOfBirth, dateOfBirth);
-            PersonUtils.GetFiscalCode(personMan).Should().Be(expected);
+            PersonUtils.GetTemporaryCode(personMan).Should().Be(expected);
         }
 
         [Theory]
         [InlineData("Tiziana", "rossi", "ROMA", "1985-11-05", "RSSTZN85S45H501")]
         [InlineData("Chiara", "verdi", "spagna", "2000-01-10", "VRDCHR00A50Z404")]
         [InlineData("ANNALISA", "rosi", "Firenze", "1990-06-27", "RSONLS90H67D612")]
-        public void GetCodFis_Woman_test(string name, string surname, string placeOfBirth, string dateOfBirthString, string expected)
+        public void GetTemporaryCode_Woman_test(string name, string surname, string placeOfBirth, string dateOfBirthString, string expected)
         {
             DateOnly dateOfBirth = DateOnly.Parse(dateOfBirthString);
             Person personWoman = new Woman(name, surname, placeOfBirth, dateOfBirth);
-            PersonUtils.GetFiscalCode(personWoman).Should().Be(expected);
+            PersonUtils.GetTemporaryCode(personWoman).Should().Be(expected);
         }
 
         // test con IEnumerable
-
-        public static IEnumerable<object[]> CodFisTestData =>
-            new List<Object[]>
+        public static IEnumerable<object[]> GetTemporyCodFisTestData()
+        {
+            return new List<Object[]>
             {
             new Object[] {new Man("Marco", "rossi", "ROMA",DateOnly.Parse("1985-11-05")), "RSSMRC85S05H501" },
             new Object[] {new Man("Mario", "fo", "spagna", DateOnly.Parse("2000-01-10")), "FOXMRA00A10Z404"},
@@ -114,7 +113,22 @@ namespace FiscalCode.Test
             new Object[] {new Woman("Tiziana ", "rossi", "ROMA", DateOnly.Parse("1985-11-05")), "RSSTZN85S45H501"},
             new Object[] {new Woman("Chiara", "verdi","spagna", DateOnly.Parse("2000-01-10")), "VRDCHR00A50Z404"},
             new Object[] {new Woman("ANNALISA", "rosi", "Firenze",DateOnly.Parse("1990 - 06 - 27")), "RSONLS90H67D612"},
+            };
+        }
 
+        [Theory]
+        [MemberData(nameof(GetTemporyCodFisTestData))]
+
+        public void GetTemporaryCode_Test(Person person, string expected)
+        {
+            PersonUtils.GetTemporaryCode(person).Should().Be(expected);
+        }
+
+        // CODE FISCAL 
+        public static IEnumerable<object[]> CodFisTestData =>
+            new List<Object[]>
+            {
+            new Object[] {new Man("Marco", "rossi", "ROMA",DateOnly.Parse("1985-11-05")), "RSSMRC85S05H501Z" },
             };
 
         [Theory]
@@ -124,7 +138,6 @@ namespace FiscalCode.Test
         {
             PersonUtils.GetFiscalCode(person).Should().Be(expected);
         }
-
 
     }
 }
